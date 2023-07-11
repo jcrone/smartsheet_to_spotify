@@ -1,0 +1,69 @@
+<%= form_with(model: import) do |form| %>
+  <% if import.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(import.errors.count, "error") %> prohibited this import from being saved:</h2>
+
+      <ul>
+        <% import.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div>
+    <label class="form-label">Collection Name</label>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+    <%= form.hidden_field :smartsheet_id, value: @smartsheet_id %>
+    <%= form.hidden_field :status, value: 'processing' %>
+
+    <div>
+      <h2>Match Columns</h2>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Title Column</label>
+        <div class="col-sm-10">
+          <%= form.select(:headers[0], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Description Column</label>
+        <div class="col-sm-10">
+          <%= form.select(:headers[1], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label  class="col-sm-2 col-form-label">MFG Column</label>
+        <div class="col-sm-10">
+          <%= form.select(:headers[2], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Category Column</label>
+        <div class="col-sm-10">
+          <%= form.select(:headers[3], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">Deminsions Column</label>
+        <div class="col-sm-10">
+          <%= form.select(:headers[4], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">Product Grade Column</label>
+        <div class="col-sm-10">
+          <%= form.select(:headers[5], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+        </div>
+      </div>
+    </div>
+
+
+    <div>
+      <%= form.submit class: "form-control"  %>
+    </div>
+
+
+<% end %>

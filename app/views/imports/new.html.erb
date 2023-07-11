@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>New import</h1>
+  <% if @smartsheet_id > 0 %>
+    <%= render "form", import: @import %>
+
+  <br>
+  <div>
+    <%= link_to "Back to sheets", smartsheets_path %>
+  </div>
+  <% else %>
+  <div>
+    <%= link_to "Need to pick a sheet to import", smartsheets_path %>
+  </div>
+  <% end %>
+</div>

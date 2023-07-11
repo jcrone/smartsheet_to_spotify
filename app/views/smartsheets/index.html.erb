@@ -1,0 +1,21 @@
+<p style="color: green"><%= notice %></p>
+<div class="container">
+    <h1>Sheets</h1>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">id </th>
+        <th scope="col">Name</th>
+        <th scope="col">Created On</th>
+        <th scope="col">Last Updated</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @sheets.each do |smartsheet| %>
+            <%= render  partial: 'smartsheet', locals: {smartsheet: smartsheet} %>           
+        <% end %>
+    </tbody>
+    </table>
+</div>
+
