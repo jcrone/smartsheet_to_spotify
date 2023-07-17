@@ -49,11 +49,12 @@ gem "bootsnap", require: false
 # gem "sassc-rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "byebug"
 end
 
 group :development do
@@ -76,3 +77,8 @@ end
 
 gem 'smartsheet', '>= 1.3.0', git: 'https://github.com/jcrone/smartsheet-ruby-sdk.git'
 gem 'shopify_api', '~> 13.0'
+
+gem "sidekiq", "~> 7.1"
+gem 'down', '~> 5.4', '>= 5.4.1'
+gem "http", "~> 5.0"
+

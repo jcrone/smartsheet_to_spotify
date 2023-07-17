@@ -1,0 +1,26 @@
+<p style="color: green"><%= notice %></p>
+
+<p>
+  <strong>Import:</strong>
+  <%= @inventory.import_id %>
+</p>
+
+<p>
+  <strong>Row:</strong>
+  <%= @inventory.row_id %>
+</p>
+
+<p>
+  <strong>Columns:</strong>
+  <%= @inventory.columns %>
+</p>
+<% @inventory.photos.each do |file| %>
+  <%= link_to file.filename, file, target: :blank %>
+<% end %>
+</div>
+<div>
+  <%= link_to "Edit this inventory", edit_inventory_path(@inventory) %> |
+  <%= link_to "Back to inventories", inventories_path %>
+
+  <%= button_to "Destroy this inventory", @inventory, method: :delete %>
+</div>

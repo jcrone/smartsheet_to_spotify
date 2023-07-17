@@ -8,6 +8,7 @@ class ImportsController < ApplicationController
 
   # GET /imports/1 or /imports/1.json
   def show
+    smartsheet_client = Smartsheet::Client.new(token:  Rails.application.credentials.dig(:smartsheets, :token))
   end
 
   # GET /imports/new
@@ -21,20 +22,18 @@ class ImportsController < ApplicationController
       
       @sheet = sheet[:rows]
       columns = sheet[:columns]
-      @columns = columns.pluck(:title)
-      # binding.break
+      @columns = columns.pluck(:id, :title)
+
     end
+
     @import = Import.new
     
-    session = ShopifyAPI::Utils::SessionUtils.load_current_session(
-      auth_header: auth_header,
-      cookies: cookies,
-      is_online: is_online
-    )
-    client = ShopifyAPI::Clients::Rest::Admin.new(
-      session: session
-    )
-    @response = client.get(path: 'shop')
+
+    session = ShopifyAPI::Auth::Session.new(shop: Rails.application.credentials.dig(:shopify, :domain), access_token: Rails.application.credentials.dig(:shopify, :token))
+    client = ShopifyAPI::Clients::Rest::Admin.new(session: session)
+    
+
+    # @response = @shopify_client.get(path: 'shop')
 
     console
 
@@ -60,6 +59,7 @@ class ImportsController < ApplicationController
 
     respond_to do |format|
       if @import.save
+        AddInventoryJob.perform_later(@import.id)
         format.html { redirect_to import_url(@import), notice: "Import was successfully created." }
         format.json { render :show, status: :created, location: @import }
       else
@@ -100,6 +100,6 @@ class ImportsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def import_params
-      params.require(:import).permit(:smartsheet_id, :headers, :status, :name)
+      params.require(:import).permit(:smartsheet_id, {columns: {}}, :status, :name)
     end
 end

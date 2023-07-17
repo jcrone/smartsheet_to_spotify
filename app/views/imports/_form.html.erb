@@ -25,37 +25,37 @@
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">Title Column</label>
         <div class="col-sm-10">
-          <%= form.select(:headers[0], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+          <%= form.select("columns[title]", @columns.map { |id, value| [ value, id]},{}, {class: "form-control", required: true}) %>
         </div>
       </div>
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">Description Column</label>
         <div class="col-sm-10">
-          <%= form.select(:headers[1], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+          <%= form.select("columns[description]", @columns.map { |id, value| [ value, id]},{}, {class: "form-control", required: true}) %>
         </div>
       </div>
       <div class="mb-3 row">
         <label  class="col-sm-2 col-form-label">MFG Column</label>
         <div class="col-sm-10">
-          <%= form.select(:headers[2], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+          <%= form.select("columns[mfg]", @columns.map { |id, value| [ value, id]},{}, {class: "form-control", required: true}) %>
         </div>
       </div>
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">Category Column</label>
         <div class="col-sm-10">
-          <%= form.select(:headers[3], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+          <%= form.select("columns[category]", @columns.map { |id, value| [ value, id]},{}, {class: "form-control", required: true}) %>
         </div>
       </div>
       <div class="mb-3 row">
         <label for="staticEmail" class="col-sm-2 col-form-label">Deminsions Column</label>
         <div class="col-sm-10">
-          <%= form.select(:headers[4], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+          <%= form.select("columns[deminsions]", @columns.map { |id, value| [ value, id]},{}, {class: "form-control", required: true}) %>
         </div>
       </div>
       <div class="mb-3 row">
         <label for="staticEmail" class="col-sm-2 col-form-label">Product Grade Column</label>
         <div class="col-sm-10">
-          <%= form.select(:headers[5], @columns.map { |value| [ value, value]},{}, {class: "form-control", required: true}) %>
+          <%= form.select("columns[grade]", @columns.map { |id, value| [ value, id]},{}, {class: "form-control", required: true}) %>
         </div>
       </div>
     </div>

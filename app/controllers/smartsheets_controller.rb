@@ -9,8 +9,7 @@ class SmartsheetsController < ApplicationController
           )
  
         @sheets =  folder[:sheets]
-
-        console 
+        
     end
  
     private

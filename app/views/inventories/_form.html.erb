@@ -1,0 +1,37 @@
+<%= form_with(model: inventory) do |form| %>
+  <% if inventory.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(inventory.errors.count, "error") %> prohibited this inventory from being saved:</h2>
+
+      <ul>
+        <% inventory.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :import_id, style: "display: block" %>
+    <%= form.text_field :import_id %>
+  </div>
+
+  <div>
+    <%= form.label :row_id, style: "display: block" %>
+    <%= form.text_field :row_id %>
+  </div>
+
+  <div>
+    <%= form.label :headers, style: "display: block" %>
+    <%= form.text_field :headers %>
+  </div>
+
+  <div>
+    <%= form.label :photos, style: "display: block" %>
+    <%= form.file_field :photos, direct_upload: false, multiple: true %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

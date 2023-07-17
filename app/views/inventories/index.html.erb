@@ -1,0 +1,21 @@
+<p style="color: green"><%= notice %></p>
+<div class="container">
+  <h1>Inventories</h1>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">import ID </th>
+        <th scope="col">Row ID</th>
+        <th scope="col">Row Number</th>
+        <th scope="col">Columns</th>
+        <th scope="col">Has Photos</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% @inventories.each do |inventory| %>
+      <%= render inventory %>
+    <% end %>
+    </tbody>
+    </table>
+</div>
