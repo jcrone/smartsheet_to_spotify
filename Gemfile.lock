@@ -136,6 +136,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    font-awesome-sass (6.4.0)
+      sassc (~> 2.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
     hash_diff (1.1.1)
@@ -247,6 +249,8 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    sassc (2.4.0)
+      ffi (~> 1.9)
     securerandom (0.2.2)
     selenium-webdriver (4.10.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -316,6 +320,7 @@ DEPENDENCIES
   cssbundling-rails
   debug
   down (~> 5.4, >= 5.4.1)
+  font-awesome-sass (~> 6.4.0)
   http (~> 5.0)
   image_processing (~> 1.2)
   jbuilder

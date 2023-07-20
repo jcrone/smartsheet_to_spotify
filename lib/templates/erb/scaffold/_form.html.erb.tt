@@ -1,0 +1,43 @@
+
+
+<%%= form_with(model: <%= model_resource_name %>) do |form| %>
+  <%% if <%= singular_table_name %>.errors.any? %>
+    <div style="color: red">
+      <h2><%%= pluralize(<%= singular_table_name %>.errors.count, "error") %> prohibited this <%= singular_table_name %> from being saved:</h2>
+
+      <ul>
+        <%% <%= singular_table_name %>.errors.each do |error| %>
+          <li><%%= error.full_message %></li>
+        <%% end %>
+      </ul>
+    </div>
+  <%% end %>
+
+<% attributes.each do |attribute| -%>
+   <div class="d-flex flex-row align-items-center mb-4">
+    <div class="form-outline flex-fill mb-0">
+<% if attribute.password_digest? -%>
+    <%%= form.label :password, autocomplete: "#{:password}", class: "form-label"%>
+    <%%= form.password_field :password, class: "form-control" %>
+  </div>
+  </div>
+
+  <div class="d-flex flex-row align-items-center mb-4">
+    <div class="form-outline flex-fill mb-0">
+    <%%= form.label :password_confirmation, class: "form-label"%>
+    <%%= form.password_field :password_confirmation, class: "form-control" %>
+<% elsif attribute.attachments? -%>
+    <%%= form.label :<%= attribute.column_name %>, class: "form-label" %>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, multiple: true %>
+<% else -%>
+    <%%= form.label :<%= attribute.column_name %>, class: "form-label" %>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, autocomplete: "<%= attribute.column_name %>", class: "form-control" %>
+<% end -%>
+  </div>
+  </div>
+
+<% end -%>
+  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+    <%%= form.submit class: "btn btn-primary btn-lg mt-4" %>
+  </div>
+<%% end %>

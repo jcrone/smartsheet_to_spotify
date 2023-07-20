@@ -1,10 +1,52 @@
 <p style="color: green"><%= notice %></p>
+<div class="container">
+  <h1>import</h1>
+  <div class="shadow p-3 mb-5 bg-body rounded">
+              <div class="mb-2">
+        <strong>ID: </strong>
+        <%= @import.id %>
+      </div>
+      <div class="mb-2">
+        <strong>Name: </strong>
+        <%= @import.name %>
+      </div>
+              <div class="mb-2">
+        <strong>Smartsheet ID: </strong>
+        <%= @import.smartsheet_id %>
+      </div>
+              <div class="mb-2">
+        <strong>Columns: </strong>
+        <%= @import.columns %>
+      </div>
+              <div class="mb-2">
+        <strong>Created AT: </strong>
+        <%= @import.created_at %>
+      </div>
 
-<%= render @import %>
+              <div class="mb-2">
+        <strong>Status: </strong>
+        <%= @import.status %>
+      </div>
+ 
+      <!-- todo add javascript to update on screen or turbo update  -->
+          <% if @import.status == 'complete' %>
+            <%= button_to "Add to Shopify", send_to_shopify_path, params: {id: @import.id}, method: :get, class: "btn btn-primary"  %>
+          <% else %>
+            still processing....<i class="fa-solid fa-truck fa-spin"></i>
+          <% end %>
+  
+  
+      </div>
 
-<div>
-  <%= link_to "Edit this import", edit_import_path(@import) %> |
-  <%= link_to "Back to imports", imports_path %>
-
-  <%= button_to "Destroy this import", @import, method: :delete %>
+  
+  <div>
+    <%= link_to "Edit this import", edit_import_path(@import) %> |
+    <%= link_to "Back to imports", imports_path %>
+  
+    <%= button_to "Destroy this import", @import, method: :delete, class: "btn btn-danger"  %>
+  </div>
 </div>
+
+
+
+

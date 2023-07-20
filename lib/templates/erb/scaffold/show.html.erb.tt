@@ -1,0 +1,20 @@
+<div class="container">
+    <h1><%= human_name.titleize %></h1>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <% attributes.reject(&:password_digest?).each do |attribute| -%>
+        <div class="mb-2">
+          <strong><%= attribute.human_name %>: </strong>
+          <%%= @<%= singular_table_name %>.<%= attribute.name %> %>
+        </div>
+        <% end -%>
+        <%%= render @<%= singular_table_name %> %>
+    </div>
+
+    
+    <div>
+      <%%= link_to "Edit this <%= human_name.downcase %>", <%= edit_helper(type: :path) %> %> |
+      <%%= link_to "Back to <%= human_name.pluralize.downcase %>", <%= index_helper(type: :path) %> %>
+    
+      <%%= button_to "Destroy this <%= human_name.downcase %>", <%= model_resource_name(prefix: "@") %>, method: :delete, class:"btn btn-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?' }  %>
+    </div>
+</div>

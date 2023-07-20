@@ -1,22 +1,11 @@
-<div id="<%= dom_id import %>">
-  <p>
-    <strong>Smartsheet:</strong>
-    <%= import.smartsheet_id %>
-  </p>
 
-  <p>
-    <strong>Columns:</strong>
-    <%= import.columns %>
-  </p>
-
-  <p>
-    <strong>Status:</strong>
-    <%= import.status %>
-  </p>
-
-  <p>
-    <strong>Name:</strong>
-    <%= import.name %>
-  </p>
-
-</div>
+<tr>
+  <div id="<%= dom_id import %>">
+    <td><%= import.id %></td>
+    <td><%= import.name %></td>
+    <td><%= import.smartsheet_id %></td>
+    <td><%= import.created_at %></td>
+    <td><%= import.status %></td>
+    <td> <%= link_to "Show this import", import, class: "btn btn-primary" %></td>
+  </div>
+</tr>

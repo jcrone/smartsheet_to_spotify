@@ -1,5 +1,6 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[ show edit update destroy ]
+  require 'base64'
+  before_action :set_import, only: %i[ show edit update destroy send_to_shopify ]
 
   # GET /imports or /imports.json
   def index
@@ -8,7 +9,13 @@ class ImportsController < ApplicationController
 
   # GET /imports/1 or /imports/1.json
   def show
-    smartsheet_client = Smartsheet::Client.new(token:  Rails.application.credentials.dig(:smartsheets, :token))
+    session = ShopifyAPI::Auth::Session.new(shop: Rails.application.credentials.dig(:shopify, :domain), access_token: Rails.application.credentials.dig(:shopify, :token))
+    client = ShopifyAPI::Clients::Rest::Admin.new(session: session)
+    @response = client.get(path: 'shop')
+    # binding.break
+    console
+
+
   end
 
   # GET /imports/new
@@ -23,28 +30,67 @@ class ImportsController < ApplicationController
       @sheet = sheet[:rows]
       columns = sheet[:columns]
       @columns = columns.pluck(:id, :title)
-
     end
-
     @import = Import.new
-    
-
-    session = ShopifyAPI::Auth::Session.new(shop: Rails.application.credentials.dig(:shopify, :domain), access_token: Rails.application.credentials.dig(:shopify, :token))
-    client = ShopifyAPI::Clients::Rest::Admin.new(session: session)
-    
-
-    # @response = @shopify_client.get(path: 'shop')
-
-    console
-
   end
 
-  # Title  - product.title = "Burton Custom Freestyle 151"       
-  # Body   - product.body_html = "<strong>Good snowboard!</strong>"
-  # Vendor - product.vendor = "Burton"
-  # ProductType - product.product_type = "Snowboard"
-  # ProductDemisions - Add this to the product body
-  # Grade - product.tags = ["Used"]
+  def send_to_shopify
+
+    # session = ShopifyAPI::Auth::Session.new(shop: Rails.application.credentials.dig(:shopify, :domain), access_token: Rails.application.credentials.dig(:shopify, :token))
+    # client = ShopifyAPI::Clients::Rest::Admin.new(session: session)
+    # body = {
+    #   custom_collection: {
+    #     title: @import.name
+    #   }
+    # }
+
+    # response = client.get(path: "products")
+    # custom_collection = client.post(
+    #     path: "custom_collections",
+    #     body: body
+    #   )
+    # collection_id = custom_collection.body["custom_collection"]["id"]  
+      
+    # @inventory = @import.inventories
+    # @item = Inventory.find(2201)
+    # images = @item.photos
+    
+    # add_images = []
+    # images.each do |image|
+    #   image_data = image.download
+    #   image_base = Base64.strict_encode64(image_data)
+    #   add_images << { attachment: image_base }
+    # end
+
+    # image = @item.photos.first
+    # image_data = image.download
+    # image_base = Base64.strict_encode64(image_data)
+
+    # body = {
+    #    product: {
+    #      title: @item.columns['title'],
+    #      body_html: "<strong>#{@item.columns['description']}</strong> Deminsions: #{@item.columns['deminsions']}",
+    #      vendor: @item.columns['mfg'],
+    #      product_type:  @item.columns['category'],
+    #      tags: @item.columns['grade'],
+    #      variants: [
+    #       {
+    #         inventory_quantity: 10,
+    #       }
+    #     ],
+    #     images: add_images
+    #   }
+    # }
+    # @new_item = client.post(
+    #   path: "products",
+    #   body: body
+    # )
+
+
+    AddToShopifyJob.perform_later(@import.id)
+    redirect_to import_url(@import), notice: "In the process of sending to shopify."
+  end
+
 
 
 

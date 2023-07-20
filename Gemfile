@@ -81,4 +81,6 @@ gem 'shopify_api', '~> 13.0'
 gem "sidekiq", "~> 7.1"
 gem 'down', '~> 5.4', '>= 5.4.1'
 gem "http", "~> 5.0"
+gem "font-awesome-sass", "~> 6.4.0"
+
 

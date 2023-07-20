@@ -51,22 +51,10 @@ class AddInventoryJob < ApplicationJob
             content_type: "image/jpeg"
           )
         end
-        # all_attachments = row_photos.pluck(:url)
-        # if !all_attachments.blank?
-        #   all_attachments.each do |photo|
-        #     p "🔥🔥🔥🔥: ATTACHMENTS :: #{photo}"
-        #     temp_photo = Down::Http.download(photo, extension: "jpg")
-        #     p "🔥🔥🔥🔥: ATTACHMENTS :: #{temp_photo}"
-        #     # new_item.photos.attach(temp_photo)
-        #     new_item.photos.attach(
-        #       io: File.open(temp_photo.path),
-        #       filename: "#{SecureRandom.hex}.jpg", 
-        #       content_type: "image/jpeg"
-        #     )
-        #   end
-          new_item.save
-        # end
+        new_item.save
       end
+      @import.status = "complete"
+      @import.save
     end  
 
   end 
