@@ -14,14 +14,50 @@ class ImportsController < ApplicationController
     @response = client.get(path: 'shop')
     # binding.break
     console
-
-
   end
 
   # GET /imports/new
   def new
     @smartsheet_id = params[:smartsheet_id].to_i
     smartsheet_client = Smartsheet::Client.new(token:  Rails.application.credentials.dig(:smartsheets, :token))
+
+    shopify_session = ShopifyAPI::Auth::Session.new(shop: Rails.application.credentials.dig(:shopify, :domain), access_token: Rails.application.credentials.dig(:shopify, :token))
+    @shopify_client = ShopifyAPI::Clients::Rest::Admin.new(session: shopify_session)
+
+    @colletions = @shopify_client.get(path: "products")
+
+    session = ShopifyAPI::Auth::Session.new(
+      shop: Rails.application.credentials.dig(:shopify, :domain),
+      access_token: Rails.application.credentials.dig(:shopify, :token)
+    )
+    client = ShopifyAPI::Clients::Graphql::Admin.new(
+      session: session
+    )
+    console
+    query = <<~QUERY
+      query {
+        collections(first: 100) {
+          edges {
+            node {
+              id
+              title
+              handle
+              updatedAt
+              sortOrder
+            }
+          }
+        }
+      }
+    QUERY
+    @response = client.query(query: query)
+    @collections_dropdown = Array.new
+    @testing = @response.body['data']['collections']['edges']
+    @testing.each do |dropdown|
+      print dropdown
+      temp_collection = Array.new << dropdown['node']['title'] << dropdown['node']['id'].chars.last(12).join
+      @collections_dropdown << temp_collection
+    end 
+
     unless @smartsheet_id == 0
       sheet = smartsheet_client.sheets.get(
         sheet_id: @smartsheet_id
@@ -31,73 +67,19 @@ class ImportsController < ApplicationController
       columns = sheet[:columns]
       @columns = columns.pluck(:id, :title)
     end
+
     @import = Import.new
   end
 
   def send_to_shopify
-
-    # session = ShopifyAPI::Auth::Session.new(shop: Rails.application.credentials.dig(:shopify, :domain), access_token: Rails.application.credentials.dig(:shopify, :token))
-    # client = ShopifyAPI::Clients::Rest::Admin.new(session: session)
-    # body = {
-    #   custom_collection: {
-    #     title: @import.name
-    #   }
-    # }
-
-    # response = client.get(path: "products")
-    # custom_collection = client.post(
-    #     path: "custom_collections",
-    #     body: body
-    #   )
-    # collection_id = custom_collection.body["custom_collection"]["id"]  
-      
-    # @inventory = @import.inventories
-    # @item = Inventory.find(2201)
-    # images = @item.photos
-    
-    # add_images = []
-    # images.each do |image|
-    #   image_data = image.download
-    #   image_base = Base64.strict_encode64(image_data)
-    #   add_images << { attachment: image_base }
-    # end
-
-    # image = @item.photos.first
-    # image_data = image.download
-    # image_base = Base64.strict_encode64(image_data)
-
-    # body = {
-    #    product: {
-    #      title: @item.columns['title'],
-    #      body_html: "<strong>#{@item.columns['description']}</strong> Deminsions: #{@item.columns['deminsions']}",
-    #      vendor: @item.columns['mfg'],
-    #      product_type:  @item.columns['category'],
-    #      tags: @item.columns['grade'],
-    #      variants: [
-    #       {
-    #         inventory_quantity: 10,
-    #       }
-    #     ],
-    #     images: add_images
-    #   }
-    # }
-    # @new_item = client.post(
-    #   path: "products",
-    #   body: body
-    # )
-
-
     AddToShopifyJob.perform_later(@import.id)
     redirect_to import_url(@import), notice: "In the process of sending to shopify."
   end
 
-
-
-
-
   # GET /imports/1/edit
   def edit
   end
+
 
   # POST /imports or /imports.json
   def create
@@ -146,6 +128,6 @@ class ImportsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def import_params
-      params.require(:import).permit(:smartsheet_id, {columns: {}}, :status, :name)
+      params.require(:import).permit(:smartsheet_id, {columns: {}}, :status, :name, :collections_id)
     end
 end

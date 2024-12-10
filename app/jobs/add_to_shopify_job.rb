@@ -41,11 +41,14 @@ class AddToShopifyJob < ApplicationJob
         vendor: item.columns['mfg'],
         product_type:  item.columns['category'],
         tags: item.columns['grade'],
+         #  price: item.columns['price'],
         variants: [
          {
            inventory_management: "shopify",
            inventory_policy: "deny",
-           inventory_quantity: 10,
+           inventory_quantity: item.columns['qty'].to_i,
+           sku: item.columns['sku'],
+           barcode: item.columns['barcode'],
          }
         ],
        images: add_images
@@ -63,18 +66,20 @@ class AddToShopifyJob < ApplicationJob
   end
   
   def add_custom_collection
-    body = {
-      custom_collection: {
-        title: @import.name
-      }
-    }
+    # body = {
+    #   custom_collection: {
+    #     title: @import.name
+    #   }
+    # }
 
-    custom_collection = @client.post(
-      path: "custom_collections",
-      body: body
-    )
+    # custom_collection = @client.post(
+    #   path: "custom_collections",
+    #   body: body
+    # )
 
-    @collection_id = custom_collection.body["custom_collection"]["id"]  
+    # @collection_id = custom_collection.body["custom_collection"]["id"]  
+
+    @collection_id = @import.collections_id
   end 
 
 

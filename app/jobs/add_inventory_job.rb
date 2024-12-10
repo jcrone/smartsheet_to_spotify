@@ -27,8 +27,32 @@ class AddInventoryJob < ApplicationJob
       columns = row[:cells]   
       i = 1
       column_keys.each do |column_key|
-        new_column = columns.find {|c| c[:column_id] == column_key[1].to_i }
-        new_item.columns[column_key[0]] = new_column[:display_value]
+        if column_key[0]!= "photo"
+          new_column = columns.find {|c| c[:column_id] == column_key[1].to_i }
+          new_item.columns[column_key[0]] = new_column[:display_value]
+        else 
+          new_column = columns.find {|c| c[:column_id] == column_key[1].to_i }
+          if !new_column[:image].nil?
+            body = [
+              {
+                image_id: new_column[:image][:id]
+              }
+            ]
+            image_urls = smartsheet_client.sheets.list_image_urls(
+              body: body
+            )
+            images = image_urls[:image_urls]
+            images.each do |image|
+              temp_photo = Down::Http.download(image[:url], extension: "jpg")
+              p "🔥🔥CELL PHOTO 🔥🔥: CELLPHOTO :: #{temp_photo}"
+              new_item.photos.attach(
+                io: File.open(temp_photo.path),
+                filename: "#{SecureRandom.hex}.jpg", 
+                content_type: "image/jpeg"
+              )
+            end 
+          end 
+        end 
         i += 1     
       end
       
